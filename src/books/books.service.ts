@@ -1,15 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
-import { BooksEntity } from './entities/books.entity';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BooksService {
-  private readonly books: BooksEntity[] = [];
+  create(createBookDto: CreateBookDto) {
+    return 'This action adds a new book';
+  }
 
-  async create(book: CreateBookDto): Promise<BooksEntity> {
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    await this.books.push(book);
+  findAll() {
+    return `This action returns all books`;
+  }
 
-    return book;
+  findOne(id: number) {
+    return `This action returns a #${id} book`;
+  }
+
+  update(id: number, updateBookDto: UpdateBookDto) {
+    return `This action updates a #${id} book`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} book`;
   }
 }
