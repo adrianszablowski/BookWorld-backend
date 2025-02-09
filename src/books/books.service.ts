@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ActionError } from 'shared/errors/action-error.enum';
+import { EntityError } from 'shared/errors/entity.error';
 import { Repository } from 'typeorm';
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
+import { Result } from 'typescript-result';
+import { CreateBookRequest } from './dto/create-book.request';
 import { BookEntity } from './entities/book.entity';
 
 @Injectable()
@@ -12,23 +14,20 @@ export class BooksService {
     private booksRepository: Repository<BookEntity>,
   ) {}
 
-  create(createBookDto: CreateBookDto) {
-    return 'This action adds a new book';
-  }
+  public async create(
+    request: CreateBookRequest,
+  ): Promise<Result<string, EntityError>> {
+    const newBook = this.booksRepository.create({
+      ...request,
+    });
 
-  findAll() {
-    return `This action returns all books`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
-  }
-
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+    try {
+      const savedBook = await this.booksRepository.save(newBook);
+      return Result.ok<string>(savedBook.id);
+    } catch {
+      return Result.error<EntityError>(
+        new EntityError(BookEntity.name, ActionError.CREATE),
+      );
+    }
   }
 }

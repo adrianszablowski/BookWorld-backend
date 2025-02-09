@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateBookDto {
+export class CreateBookRequest {
   @ApiProperty({
     example: 'Harry Potter',
     description: 'Book title',
@@ -10,5 +10,5 @@ export class CreateBookDto {
   })
   @IsString()
   @IsNotEmpty()
-  readonly title: string;
+  public title: string;
 }
