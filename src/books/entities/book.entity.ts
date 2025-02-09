@@ -15,5 +15,5 @@ export class BookEntity extends BaseEntity {
   @FilterField(() => String, { sqlExp: bookEntity.fields.title })
   @SortingField({ sqlExp: bookEntity.fields.title })
   @Column({ name: bookEntity.fields.title, nullable: false, type: String })
-  title: string;
+  public title: string;
 }
