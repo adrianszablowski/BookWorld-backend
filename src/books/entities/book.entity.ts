@@ -1,11 +1,19 @@
-import { Type } from 'class-transformer';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { FilterField, SortingField } from 'nestjs-graphql-tools';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity } from 'typeorm';
-import { bookEntity } from '../books.consts';
+import { bookEntity, bookFields } from '../books.consts';
 
-@Entity({ name: bookEntity.name })
+@ObjectType()
+@Entity(bookEntity.name)
 export class BookEntity extends BaseEntity {
-  @Column({ nullable: false })
-  @Type(() => String)
+  @Field(() => String, {
+    name: bookFields.title.name,
+    description: bookFields.title.description,
+    nullable: false,
+  })
+  @FilterField(() => String, { sqlExp: bookEntity.fields.title })
+  @SortingField({ sqlExp: bookEntity.fields.title })
+  @Column({ name: bookEntity.fields.title, nullable: false, type: String })
   title: string;
 }
