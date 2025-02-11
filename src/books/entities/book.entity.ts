@@ -72,7 +72,7 @@ export class BookEntity extends BaseEntity {
     nullable: false,
     type: String,
   })
-  public genres: string[];
+  public genres: string;
 
   @Field(() => Number, {
     name: bookFields.rating.name,
@@ -89,7 +89,7 @@ export class BookEntity extends BaseEntity {
   public rating: number;
 
   // todo: relation OneToMany
-  @Field(() => [String], {
+  @Field(() => String, {
     name: bookFields.reviews.name,
     description: bookFields.reviews.description,
     nullable: true,
@@ -100,5 +100,5 @@ export class BookEntity extends BaseEntity {
     nullable: true,
     default: null,
   })
-  public reviews: string[] | null;
+  public reviews: string | null;
 }
