@@ -3,5 +3,6 @@
 # ------------------------------------------------------
 
 type Query {
-  hello: String!
+  """List of Books"""
+  books: String!
 }
