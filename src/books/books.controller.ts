@@ -1,9 +1,24 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Res,
+} from '@nestjs/common';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Response } from 'express';
 import { errorResult } from 'shared/errors/error.result';
 import { BooksService } from './books.service';
 import { CreateBookRequest } from './dto/create-book.request';
+import { UpdateBookRequest } from './dto/update-book.request';
 
 @ApiTags('books')
 @Controller('books')
@@ -42,6 +57,48 @@ export class BooksController {
 
     return result.fold(
       (value) => res.status(HttpStatus.CREATED).json(value),
+      (error) => errorResult(error, res),
+    );
+  }
+
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'ID of the book to be updated',
+  })
+  @ApiBody({
+    type: UpdateBookRequest,
+    description: 'Data required to update the book',
+  })
+  @ApiResponse({
+    status: 200,
+    type: String,
+    isArray: false,
+    description: 'ID of the updated book',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input data provided',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Book with similar data already exists',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'An error occurred while updating the book',
+  })
+  @ApiOperation({ description: 'Update an existing book' })
+  @Patch(':id')
+  public async update(
+    @Param('id') id: string,
+    @Body() updateBookDto: UpdateBookRequest,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const result = await this.booksService.update(id, updateBookDto);
+
+    return result.fold(
+      (value) => res.status(HttpStatus.OK).json(value),
       (error) => errorResult(error, res),
     );
   }

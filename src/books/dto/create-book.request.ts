@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsArray,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -52,14 +51,14 @@ export class CreateBookRequest {
   public author: string;
 
   @ApiProperty({
-    example: ['fcfdd074-68b5-4a38-837c-4a74cfb87a45'],
+    example: 'fcfdd074-68b5-4a38-837c-4a74cfb87a45',
     description: 'Book genres',
     nullable: false,
-    type: [String],
+    type: String,
   })
-  @IsArray()
+  @IsString()
   @IsNotEmpty()
-  public genres: string[];
+  public genres: string;
 
   @ApiProperty({
     example: 4.3,
@@ -74,12 +73,12 @@ export class CreateBookRequest {
   public rating: number;
 
   @ApiProperty({
-    example: ['fcfdd074-68b5-4a38-837c-4a74cfb87a45'],
+    example: 'fcfdd074-68b5-4a38-837c-4a74cfb87a45',
     description: 'Book reviews',
     nullable: true,
-    type: [String],
+    type: String,
   })
-  @IsArray()
+  @IsString()
   @IsOptional()
-  public reviews?: string[];
+  public reviews?: string;
 }
